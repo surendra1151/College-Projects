@@ -1,0 +1,32 @@
+---
+title: "second_week"
+output: word_document
+---
+1) a)For training data set, I think it is difficult to say because we know cubic regression is more flexible model,so one can expect that Rss in training data to be smaller when compared with Linear Regression.Even though linear assume the true data generating process,a cubic regression will do a better job in a particular data set.But we are assuming true relationship between x and y is linear ,Increasing flexibility might not mitigate fact that linear regression correctly assume tha data processing.
+
+b)For test data,we can expect that Rss is smaller for linear regression because linear regression correctly assume the data processing.
+
+2)
+  a)Coefficients:
+             Estimate Std. Error t value Pr(>|t|)    
+(Intercept) 13.043469   0.651012  20.036  < 2e-16 ***
+Price       -0.054459   0.005242 -10.389  < 2e-16 ***
+UrbanYes    -0.021916   0.271650  -0.081    0.936    
+USYes        1.200573   0.259042   4.635 4.86e-06 ***
+
+b)sales = Carseats$Sales
+ price = Carseats$Price     
+  cor(sales, price)
+-0.4449507
+It is negative ,Negative correlation or inverse correlation is a relationship between two variables whereby they move in opposite directions. If variables X and Y have a negative correlation (or are negatively correlated), as X increases in value, Y will decrease; similarly, if X decreases in value, Y will increase.
+c) require(dplyr)
+ Carseats <- Carseats %>%
+   mutate(US= ifelse(US == "No",0,1))
+  us=Carseats$US
+ cor(sales,us)
+  The coefficients for us is  0.1770933
+  
+d)Based on R square value it is not so good
+e)
+f)I think prediction interval is better to use than confidence because A prediction interval pertains to uncertainty around a single value, while a confidence interval pertains to a mean or other statistic calculated from multiple values.
+

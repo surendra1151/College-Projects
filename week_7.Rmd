@@ -1,0 +1,84 @@
+---
+title: "week_7"
+author: "krishna sai surendra babu kalluri"
+date: "25/07/2020"
+output:
+  word_document: default
+  html_document: default
+---
+
+1 a)
+```{r, out.width='25%', fig.align='center', fig.cap='...'}
+knitr::include_graphics("C:\\Users\\kallu\\Documents\\images\\1a1.jpeg")
+knitr::include_graphics("C:\\Users\\kallu\\Documents\\images\\1a2.jpeg")
+knitr::include_graphics("C:\\Users\\kallu\\Documents\\images\\1a3.jpeg")
+```
+
+1 b)
+
+```{r, out.width='25%', fig.align='center', fig.cap='...'}
+knitr::include_graphics("C:\\Users\\kallu\\Documents\\images\\1b1.jpeg")
+knitr::include_graphics("C:\\Users\\kallu\\Documents\\images\\1b2.jpeg")
+knitr::include_graphics("C:\\Users\\kallu\\Documents\\images\\1b3.jpeg")
+```
+
+2 a)
+
+```{r setup, include=TRUE}
+data <- rbind(matrix(rnorm(30*10, mean = 2), nrow = 30),
+matrix(rnorm(30*10, mean=4), nrow = 30),
+matrix(rnorm(30*10, mean=6), nrow = 30))
+data.pca = prcomp(data)$x
+plot(data.pca[,1:2], col=c(rep(1,30), rep(2,30), rep(3,30)))
+
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+2 b)
+
+```{r setup2, include=TRUE}
+km.out=kmeans(data,3,nstart =20)
+km.out$cluster
+true_label = c(rep(1,30), rep(2,30), rep(3,30))
+table(km.out$cluster,true_label)
+knitr::opts_chunk$set(echo = TRUE)
+```
+The above code we performed k-means clustering with k =3 variable and we got the true and predicted labels.Then we compared both the labels and got to know that all of them are perfectly clustered .
+
+2 c)
+
+```{r setup1, include=TRUE}
+knitr::opts_chunk$set(echo = TRUE)
+km.out=kmeans(scale(data),3,nstart =20)
+km.out$cluster
+true_label = c(rep(1,30), rep(2,30), rep(3,30))
+table(km.out$cluster,true_label)
+
+```
+
+The above code has performed with k cluster using scale function . The results are same as the above,Here the scaling function does not have effect on results it remains to be same . 
+
+same as above results  ,scaling doesnot change results
+
+
+
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

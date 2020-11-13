@@ -1,0 +1,163 @@
+---
+title: 'Chp. 10: Unsupervised Learning'
+author: "CS 6823/MBS 6251"
+date: "7/16/2020"
+output:
+  slidy_presentation: default
+  ioslides_presentation:
+    fig_caption: yes
+header-includes: \usepackage{amsmath}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Last Time  
+
+
+## Last Time  
+Decision Trees  
+
+- Bagging  
+
+- Random Forests  
+
+- Boosting  
+
+## Outline  
+PCA  
+
+Paper discussion: Novembre et al. 2008 
+
+## Unsupervised Learning  
+- In supervised learning, we typically have a set of *p* features $X_1, X_2,..., X_p$ measured on *n* observations and a response *Y* also measured on those same *n* observations  
+
+- Unsupervised learning can be more challenging b/c we don't have any *Y* labels to test our model against a 'correct' answer.  
+
+## Principal Components Analysis  
+- Find a low dimensional representation of the data that captures as much as possible of the variation.  
+
+- PCA finds a small number of dimensions (principal components) that are each a linear combination of the *p* features.  
+
+## Principal Components Analysis  
+The first principal component of a set of features $X_1, X_2, ..., X_p$ is the normalized linear combination of the features that has the largest variance  $$Z_1 = \phi_{11}X_1 + \phi_{21}X_2 + ... + \phi_{p1}X_{p}$$
+
+## Principal Components Analysis  
+The first **principal component** of a set of features $X_1, X_2, ..., X_p$ is the normalized linear combination of the features that has the largest variance  $$Z_1 = \phi_{11}X_1 + \phi_{21}X_2 + ... + \phi_{p1}X_{p}$$
+
+## Principal Components Analysis  
+The first **principal component** of a set of features $X_1, X_2, ..., X_p$ is the normalized linear combination of the features that has the largest variance  $$Z_1 = \phi_{11}X_1 + \phi_{21}X_2 + ... + \phi_{p1}X_{p}$$
+
+First **principal component score** for the $i$th observation: 
+$$z_{i1} = \phi_{11}x_{i1} + \phi_{21}x_{i2} + ... + \phi_{p1}x_{ip}$$
+
+## Principal Components Analysis  
+$$Z_1 = \phi_{11}X_1 + \phi_{21}X_2 + ... + \phi_{p1}X_{p}$$
+
+$\phi_{11}, ..., \phi_{p1}$ are the *loadings* of the first principal component (PC) and can be written as the loading vector $\phi_1 = (\phi_{11}\quad\phi_{21} \quad ... \quad \phi_{1p})^T$
+
+## Principal Components Analysis  
+The first principal component of a set of features $X_1, X_2, ..., X_p$ is the **normalized** linear combination of the features that has the largest variance  $$Z_1 = \phi_{11}X_1 + \phi_{21}X_2 + ... + \phi_{p1}X_{p}$$
+
+By normalized, we mean that $\sum_{j=1}^{p}\phi_{j1}^2 = 1$. This is done to ensure the $\phi$'s do not become arbitrarily large.
+
+## PCA  - Computing the First PC  
+Goal: look for the linear combination of the sample feature values that has the largest sample variance, subject to normalization.  
+
+## PCA  - Computing the First PC  
+Goal: look for the linear combination of the sample feature values that has the largest sample variance, subject to normalization.  
+
+$$\begin{equation*}
+\begin{aligned}
+& \underset{\phi_{11}, ..., \phi_{p1}}{\text{maximize}}
+& & {\left\{\dfrac{1}{n} \sum_{i=1}^{n}(z_{i1} - \bar{z}_{i1})^2\right\}}  \\
+& \text{subject to}
+& & \sum_{j=1}^{p} \phi_{j1}^2 = 1
+\end{aligned}
+\end{equation*}$$ 
+
+<!-- Note:   -->
+
+<!-- - $\sigma^2 = \dfrac{\sum (X-\mu)^2}{N}$   -->
+
+<!-- - $z_{i1} = \phi_{11}x_{i1} + \phi_{21}x_{i2} + ... + \phi_{p1}x_{ip}$  where $z_{i1}$ is the score for PC1 for observation *i*  -->
+
+<!-- - Because we assume that each variable has been centered to have mean zero, we know the average of the $z_{11}, ..., z_{n1}$ is also zero.   -->
+
+<!-- - The maximization problem can be solved by a technique (eigendecomposition) from linear algebra (see https://towardsdatascience.com/tidying-up-with-pca-an-introduction-to-principal-components-analysis-f876599af383)   -->
+
+## PCA - Computing the Next PC  
+After the first principal component, $Z_1$ has been determined, we find the second PC, $Z_2$ as the linear combination of $X_1, ..., X_p$ that has maximal variance out of all linear combinations that are uncorrelated with $Z_1$. 
+
+Imposing this constraint is equivalent to constraining the loading vector $\phi_2$ to be orthogonal (perpendicular) to to $\phi_1$.  
+
+## PCA - Interpretation with Biplots
+Biplots display both the principal compononent scores and the principle component loadings.
+
+<center>
+![iris](../Images_for_slides/All_Figures/Chapter10/iris.png){ width=70%} 
+</center>
+
+## PCA - Interpretation with Biplots 
+<center>
+```{r echo=F, warning=F, message=F, fig.width=6, fig.height=3.5}
+#library(devtools); install_github("vqv/ggbiplot")
+library(ggplot2)
+library(reshape2)
+data(iris)  
+tmp <- melt(iris)
+ggplot(tmp, aes(x=Species,y=value)) + geom_boxplot(alpha=0.5) + facet_grid(.~variable) + ylab("cm") + theme(axis.text.x = element_text(angle=45))
+```
+</center>
+
+## PCA - Interpretation with Biplots  
+<center>
+```{r echo=F, warning=F, message=F, fig.height=3}
+library(ggbiplot)
+library(knitr)
+pr.out = prcomp(iris[,1:4], scale=TRUE)  
+ggbiplot(pr.out, groups=iris$Species) + scale_colour_manual(values=c("purple", "red","tomato4"), name="Iris species") + xlim(c(-3,3))
+pr.out$rotation[,1:2]
+
+```
+</center>  
+
+## PCA - Alt Interpretation  
+Principal components provide low-dimensional linear surfaces that are closest to the observations in terms of the average squared Euclidean distance.  
+
+<center>
+![fig10.2a](../Images_for_slides/All_Figures/Chapter10/10.2a.png){ width=30%}![fig10.2b](../Images_for_slides/All_Figures/Chapter10/10.2b.png){ width=30%}
+</center>
+
+ISL Fig. 10.2: PC1 and PC2 give the coordinates of the projection of 90 observations onto a plane that best fits the data with the variance in the plane maximized.  
+
+
+## Preprocessing    
+Most importantly, before PCA is performed the variables should be **centered** to have mean zero so that the resulting components are only looking at the variance within the dataset, and not capturing the overall mean of the dataset as an important variable (dimension) 
+
+## Preprocessing  
+Unless features are measured in the same units, we usually scale each variable to have standard deviation one before PCA. Here, 'Assault' measured as number per 100,000 people ($\sigma^2 = 6945$).   
+<center>
+![fig10.3a](../Images_for_slides/All_Figures/Chapter10/10.3.png){ width=70%}
+</center>
+
+## Proportion of Variance Explained  
+(After centering & scaling) the total variance present in a dataset is: $$\sum_{j=1}^p \text{Var}(X_j) = \sum_{j=1}^p\dfrac{1}{n}\sum_{i=1}^nx_{ij}^2$$ and the variance explained by the *m*th PC is: $$\dfrac{1}{n} \sum_{i=1}^nz_{im}^2 = \dfrac{1}{n}\sum_{i=1}^n\left(\sum_{j=1}^p\phi_{jm}x_{ij}\right)^2$$ 
+
+## Proportion of Variance Explained 
+The proportion of variance explained is then just:  $$ \dfrac{\sum_{i=1}^n\left(\sum_{j=1}^p\phi_{jm}x_{ij}\right)^2}{\sum_{j=1}^p\sum_{i=1}^nx_{ij}^2}$$ 
+
+## Proportion of Variance Explained  
+How many PCs to keep?  
+
+<center>
+![fig10.4](../Images_for_slides/All_Figures/Chapter10/10.4.png){ width=90%}
+</center>
+
+## Summary 
+PCA is a low dimensional representation of the data that captures as much as possible of the variation.  
+
+One of the most commomly used methods for unsupervised learning.  
+
+Can be important to scale & center variables.

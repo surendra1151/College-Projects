@@ -1,0 +1,88 @@
+---
+title: "weekly_4"
+author: "krishna sai surendra babu kalluri"
+date: "27/06/2020"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+1) a)
+
+ The curse of dimensionality refers to the phenomena that occur when classifying, organizing, and analyzing high dimensional data that does not occur in low dimensional spaces, specifically the issue of data sparsity and “closeness” of data.
+ 
+ b) The two alternative methods for least squares are 
+ 1)subset selection 2)shrinkage 
+ 
+ 1)subset selection:In this approach it involves identifying the a subset of p predictors that we believe related to response ,now we fit the model on least squares on the redced set of variables.
+ 
+2)shrinkage: In this approach it involves fitting a model involving all p predictor and the estimated coefficients are shrunken towards zero
+relative to the least squares estimates. It  has the effect of reducing variance. Depending on what
+type of shrinkage is performed, some of the coefficients may be estimated to be exactly zero. Hence, shrinkage methods can also perform
+variable selection
+
+c)advantages of subset selection:
+
+1)The subset selection is less computatonally intensive than best subset selection
+
+disadvantages:
+1)The backward selection requires n>p
+
+2)Best possible model may not be selected
+
+advantages of shrinkage method:
+
+1) Better, more stable, estimates for true population parameters,
+2) Reduced sampling and non-sampling errors,
+3) Smoothed spatial fluctuations.
+
+disadvantages :
+1)Serious errors if the population has an atypical mean. Knowing which means are “typical” and which are “atypical” can be difficult and sometimes impossible.
+
+2)Shrunk estimators can become biased estimators, tending to underestimate the true population parameters.
+
+3)Shrunk fitted models can perform more poorly on new data sets compared to the original data set used for fitting. Specifically, r-squared “shrinks.”
+
+d)My favourite statstical learning technique is
+
+Linear regression beacause  Linear Regression
+
+performs well when the dataset is linearly separable.
+
+We can use it to find the nature of the relationship
+
+among the variables. Linear Regression is easier to
+
+implement, interpret and very efficient to train. 
+
+Linear Regression is prone to over-fitting but it can
+
+be easily avoided using some dimensionality reduction
+
+techniques, regularization (L1 and L2) techniques and
+
+cross-validation.
+
+e)I have confusion between Knn and K means.
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

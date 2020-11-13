@@ -1,0 +1,119 @@
+---
+title: "week_8"
+author: "krishna sai surendra babu kalluri"
+date: "01/08/2020"
+output:
+  word_document: default
+  html_document: default
+---
+1)Here,we created a binary variable for Auto dataset.
+we wrote a condition as per the requirement.we can see the output that it satisfies the condition.
+
+```{r setup, include=TRUE}
+knitr::opts_chunk$set(echo = TRUE)
+require(ISLR); 
+require(tidyverse); 
+require(e1071);
+require(caret)
+set.seed(1)
+data(Auto)
+Auto <- as_tibble(Auto)
+
+Auto <- Auto %>%
+    mutate(highmpg = as.integer(mpg > median(mpg))) %>%
+    mutate(highmpg = factor(highmpg),
+           cylinders = factor(cylinders))
+
+Auto %>%
+    sample_n(10) %>%
+    select(mpg,highmpg)
+
+df <- data.frame()
+
+```
+
+
+ a)
+
+```{r setup1, include=TRUE}
+knitr::opts_chunk$set(echo = TRUE)
+tune.out <-tune(svm,highmpg~.,data=Auto,kernel="linear",ranges=list(cost=c(1,5,7.5,15)))
+summary(tune.out)
+
+```
+
+A support classifier is fitted for our data for different cost values for linear model and error for different values.The cost value can be varied for our classifier ,cost argument will allow to specify the cost of violation for the margin.If the cost argument is small then the margins are wide ,many support vectors will be on the margin or it will violate the margin.If the cost is large then margins are narrow and few support vectors will be on the margin or violate  the margin.Here,cost 1 is the best classifier
+
+b)
+```{r setup2, include=TRUE}
+knitr::opts_chunk$set(echo = TRUE)
+set.seed(1)
+
+tune.out <-tune(svm,highmpg~.,data=Auto,kernel="polynomial",ranges=list(cost=c(1,5,7.5,15),degree=(c(2,3,4))))
+summary(tune.out)
+
+
+```
+
+
+```{r setup3, include=TRUE}
+knitr::opts_chunk$set(echo = TRUE)
+set.seed(1)
+tune.out <-tune(svm,highmpg~.,data=Auto,kernel="radial",ranges=list(cost=c(1,5,7.5,15)),gamma=(c(1,5,7.5,15)),scale = FALSE)
+summary(tune.out)
+
+
+```
+
+From the above code ,we can interpret that accuracy of dataset can change with kernels .
+
+
+
+
+```{r setup5, include=TRUE}
+knitr::opts_chunk$set(echo = TRUE)
+
+svm.linear = svm(highmpg ~ ., data = Auto, kernel = "linear", cost = 1)
+svm.poly = svm(highmpg ~ ., data = Auto, kernel = "polynomial", cost = 10, 
+    degree = 2)
+svm.radial = svm(hghmpg ~ ., data = Auto, kernel = "radial", cost = 10, gamma = 0.01)
+plotpairs = function(fit) {
+    for (name in names(Auto)[!(names(Auto) %in% c("mpg", "mpglevel", "name"))]) {
+        plot(fit, Auto, as.formula(paste("mpg~", name, sep = "")))
+    }
+}
+
+svm.linear$cost
+
+```
+
+
+
+
+```{r setup4, include=TRUE}
+
+bestmod=tune.out$best.model
+summary(bestmod)
+
+
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

@@ -1,0 +1,122 @@
+---
+title: "Assignment3"
+author: "krishna sai surendra babu kalluri"
+date: "20/06/2020"
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(ISLR)
+data("Auto")
+mpg01 <- rep(0, length(Auto$mpg))
+mpg01[Auto$mpg > median(Auto$mpg)] <- 1
+Auto <- data.frame(Auto, mpg01)
+summary(Auto)
+
+```
+
+1) a)The above code gives the valu 0  if mpg contains a value below its median and 1 if mpg value bove its median.
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+cor(Auto[, -9])
+pairs(Auto)
+
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+set.seed(123)
+train <- sample(1:dim(Auto)[1], dim(Auto)[1]*.7, rep=FALSE)
+test <- -train
+training_data<- Auto[train, ]
+testing_data= Auto[test, ]
+mpg01.test <- mpg01[test]
+library(MASS)
+lda_model <- lda(mpg01 ~ cylinders + weight + displacement + horsepower, data = training_data)
+lda_model
+lda_pred = predict(lda_model, testing_data)
+names(lda_pred)
+pred.lda <- predict(lda_model, testing_data)
+table(pred.lda$class, mpg01.test)
+mean(pred.lda$class != mpg01.test)
+```
+
+c)From the above we splitted the tranining and test dataset ,and performed the LDA anaylsis and the test error rate was 11.01
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+qda_model = qda(mpg01 ~ cylinders + horsepower + weight + acceleration, data=training_data)
+qda_model
+qda.class=predict(qda_model, testing_data)$class
+table(qda.class, testing_data$mpg01)
+mean(qda.class != testing_data$mpg01)
+```
+
+D)From the above code we performed QDA analysis and test error was 0.093%
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+set.seed(1)
+X <- rnorm(100)
+noise <- rnorm(100)
+Y <- 3 + 1*X + 4*X^2 - 1*X^3 + noise
+```
+
+```{r setup, include=FALSE}
+library(glmnet)
+knitr::opts_chunk$set(echo = TRUE)
+set.seed(1)
+x <- rnorm(100)
+eps <- rnorm(100)
+
+b0 <- 2
+b1 <- 3
+b2 <- -1
+b3 <- 0.5
+y <- b0 + b1 * x + b2 * x^2 + b3 * x^3 + eps
+xmat <- model.matrix(y ~ x + I(x^2) + I(x^3) + I(x^4) + I(x^5) + I(x^6) + I(x^7) + I(x^8) + I(x^9) + I(x^10))[, -1]
+cv.lasso <- cv.glmnet(xmat, y, alpha = 1)
+plot(cv.lasso)
+
+```
+
+
+```{r setup, include=FALSE}
+```
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+library(glmnet)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
